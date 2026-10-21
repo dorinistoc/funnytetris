@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ro"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ACT DOAR UN ACT</title>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+/* ===== PALETTE (hard limit: 5 colours + ink black) ===== */
+:root{--manila:#d8c18a;--paper:#f2ecda;--ink:#1e3a5f;--red:#b3261e;--green:#3f5e45;--dark:#2b2520;
+--disp:"Alfa Slab One","Rockwell",Georgia,serif;--type:"Special Elite","Courier New",monospace}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:var(--type);color:var(--dark);overflow-x:hidden;
+background-color:color-mix(in srgb,var(--manila),var(--dark) 32%);
+background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/><feColorMatrix values='0 0 0 0 .17 0 0 0 0 .14 0 0 0 0 .12 0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+#desk{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:22px;padding:18px 12px 90px;position:relative}
+#ring{position:fixed;right:6vw;bottom:8vh;width:150px;height:150px;border-radius:50%;border:9px solid rgba(43,37,32,.14);border-right-color:transparent;transform:rotate(30deg);pointer-events:none}
+h1{font-family:var(--disp);font-weight:400;color:var(--red);margin:0 0 10px;font-size:clamp(22px,3.4vw,36px);letter-spacing:1px;transform:rotate(-1.5deg);text-shadow:2px 1px 0 rgba(30,58,95,.45);text-align:center}
+h1 small{display:block;font-family:var(--type);color:var(--dark);font-size:.36em;text-shadow:none;letter-spacing:2px}
+h3{font-family:var(--disp);font-weight:400;font-size:12px;margin:0 0 6px;color:var(--ink);letter-spacing:.5px}
+aside{display:flex;flex-direction:column;gap:18px;width:170px}
+.slip{background:var(--paper);padding:10px 12px 12px;border:2px solid var(--dark);border-radius:2px 5px 3px 6px;box-shadow:3px 4px 0 rgba(43,37,32,.35);position:relative}
+.slip:nth-child(odd){transform:rotate(1.6deg)}.slip:nth-child(even){transform:rotate(-1.8deg)}
+.slip::before{content:"";position:absolute;top:-9px;left:38%;width:58px;height:17px;background:rgba(216,193,138,.8);transform:rotate(-4deg);border:1px solid rgba(43,37,32,.2)}
+.big{font-family:var(--disp);font-size:24px;color:var(--dark)}
+.sub{font-size:11px;opacity:.7}
+#bubble{background:var(--paper);border:2px solid var(--dark);border-radius:12px 14px 10px 16px;padding:8px 10px;min-height:62px;font-size:13px;line-height:1.25;position:relative;margin-bottom:12px;transition:transform .25s cubic-bezier(.3,1.6,.5,1),opacity .25s}
+#bubble.hide{opacity:0;transform:scale(.85) translateY(6px)}
+#bubble::after{content:"";position:absolute;bottom:-11px;left:46px;width:16px;height:16px;background:var(--paper);border-right:2px solid var(--dark);border-bottom:2px solid var(--dark);transform:rotate(45deg)}
+#clerk{width:100%;display:block;transition:transform .2s cubic-bezier(.3,1.7,.5,1)}
+#clerk.pop{transform:scale(1.07) rotate(-2deg)}
+#clerk g.f{display:none}#clerk[data-s=bored] #f-bored,#clerk[data-s=shocked] #f-shocked,#clerk[data-s=smug] #f-smug,#clerk[data-s=crying] #f-crying{display:block}
+#boardwrap{display:flex;flex-direction:column;align-items:center}
+#clip{position:relative;background:var(--dark);padding:26px 12px 12px;border-radius:5px 8px 4px 7px;transform:rotate(.6deg);box-shadow:5px 7px 0 rgba(43,37,32,.4)}
+#clip::before{content:"";position:absolute;top:-8px;left:50%;margin-left:-40px;width:80px;height:24px;background:var(--manila);border:2px solid var(--dark);border-radius:4px 4px 10px 10px}
+#cv{display:block;width:min(300px,76vw,calc((100vh - 190px)/2));height:auto;aspect-ratio:1/2;background:var(--paper);touch-action:none}
+#banner{position:absolute;left:14px;right:14px;top:44px;background:var(--red);color:var(--paper);font-family:var(--disp);font-size:13px;text-align:center;padding:8px;border:2px solid var(--dark);transform:rotate(-2deg);display:none;z-index:3}
+#banner.show{display:block;animation:ban 3s ease both}
+@keyframes ban{0%{transform:rotate(-2deg) scale(.4);opacity:0}8%{transform:rotate(-2deg) scale(1.08);opacity:1}14%{transform:rotate(-2deg) scale(1)}88%{opacity:1}100%{opacity:0}}
+#ov{position:absolute;inset:26px 12px 12px;display:none;align-items:center;justify-content:center;background:rgba(43,37,32,.55);z-index:4;padding:10px}
+#ov.on{display:flex}
+.card{background:var(--paper);border:3px solid var(--dark);padding:14px 16px;font-size:12.5px;line-height:1.35;transform:rotate(-1.3deg);max-height:100%;overflow:auto;animation:pop .35s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pop{from{transform:rotate(-6deg) scale(.6);opacity:0}}
+.card h2{font-family:var(--disp);font-weight:400;font-size:20px;margin:0 0 6px;color:var(--red)}
+.card ol{margin:6px 0 8px;padding-left:18px}
+.stampbtn{font-family:var(--disp);font-size:13px;color:var(--red);background:transparent;border:3px solid var(--red);border-radius:4px;padding:7px 12px;cursor:pointer;transform:rotate(-2deg);box-shadow:2px 1px 0 rgba(30,58,95,.5);transition:transform .15s cubic-bezier(.3,1.6,.5,1)}
+.stampbtn:hover{transform:rotate(-2deg) scale(1.06)}.stampbtn:active{transform:rotate(-2deg) scale(.93)}
+.stampbtn.g{color:var(--green);border-color:var(--green)}
+#bar{display:flex;gap:8px;margin-top:12px}
+#touch{display:none;position:fixed;left:0;right:0;bottom:0;justify-content:center;gap:6px;padding:8px 6px calc(8px + env(safe-area-inset-bottom,0px));background:var(--dark);z-index:9}
+#touch button{flex:1;max-width:72px;font-size:11px;padding:12px 2px;color:var(--paper);border-color:var(--paper);box-shadow:none;transform:none;touch-action:none;user-select:none}
+@media (pointer:coarse),(max-width:760px){#touch{display:flex}}
+@media (max-width:760px){aside{flex-direction:row;width:auto;align-items:flex-start}aside .slip{width:150px}#clerkbox{width:130px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#banner.show{display:block}}
+</style></head><body>
+<div id="ring"></div>
+<div id="desk">
+ <aside id="left">
+  <div id="clerkbox">
+   <div id="bubble" class="hide"></div>
+   <svg id="clerk" viewBox="0 0 120 150" data-s="bored" aria-label="Funcționarul">
+    <path d="M12 150 Q14 104 60 100 Q106 104 108 150Z" fill="#3f5e45" stroke="#2b2520" stroke-width="3"/>
+    <path d="M52 102 L60 112 L68 102 L64 150 L56 150Z" fill="#b3261e" stroke="#2b2520" stroke-width="2"/>
+    <path d="M30 56 Q28 20 62 18 Q94 18 92 56 Q94 92 62 98 Q28 94 30 56Z" fill="#f2ecda" stroke="#2b2520" stroke-width="3"/>
+    <path d="M30 44 Q34 14 64 14 Q92 14 92 44 Q80 28 62 30 Q44 28 30 44Z" fill="#2b2520"/>
+    <circle cx="31" cy="62" r="6" fill="#f2ecda" stroke="#2b2520" stroke-width="2.5"/><circle cx="91" cy="62" r="6" fill="#f2ecda" stroke="#2b2520" stroke-width="2.5"/>
+    <g fill="none" stroke="#2b2520" stroke-width="2.5"><circle cx="48" cy="58" r="11"/><circle cx="76" cy="58" r="11"/><path d="M59 57 Q62 54 65 57"/></g>
+    <g id="f-bored" class="f" fill="none" stroke="#2b2520" stroke-width="3" stroke-linecap="round"><path d="M40 58 H56 M68 58 H84"/><path d="M38 47 H56 M68 47 H86"/><path d="M52 90 H72"/></g>
+    <g id="f-shocked" class="f" stroke="#2b2520" stroke-width="2.5"><circle cx="48" cy="58" r="6" fill="#f2ecda"/><circle cx="76" cy="58" r="6" fill="#f2ecda"/><circle cx="48" cy="58" r="2" fill="#2b2520"/><circle cx="76" cy="58" r="2" fill="#2b2520"/><path d="M38 40 L56 44 M68 44 L86 40" fill="none" stroke-width="3"/><ellipse cx="62" cy="91" rx="7" ry="8" fill="#2b2520"/></g>
+    <g id="f-smug" class="f" fill="none" stroke="#2b2520" stroke-width="3" stroke-linecap="round"><path d="M40 60 Q48 53 56 60 M68 60 Q76 53 84 60"/><path d="M38 47 H56 M68 40 L86 46"/><path d="M52 90 Q64 92 74 84"/></g>
+    <g id="f-crying" class="f" fill="none" stroke="#2b2520" stroke-width="3" stroke-linecap="round"><path d="M40 60 Q48 64 56 60 M68 60 Q76 64 84 60"/><path d="M38 50 L56 44 M68 44 L86 50"/><path d="M52 92 Q62 84 72 92"/><path d="M44 66 Q40 80 44 84 M80 66 Q84 80 80 84" stroke="#1e3a5f" stroke-width="4"/></g>
+    <path d="M40 80 Q50 72 62 78 Q74 72 84 80 Q78 90 62 84 Q46 90 40 80Z" fill="#2b2520"/>
+   </svg>
+   <div class="sub" style="text-align:center">Dl. Gheorghiță, funcționar (din 1987)</div>
+  </div>
+  <div class="slip"><h3>La arhivă</h3><canvas id="hold" width="96" height="64"></canvas><div class="sub">C / Shift</div></div>
+ </aside>
+ <main id="boardwrap">
+  <h1>ACT DOAR UN ACT<small>— ghișeul 4, programul se încheie la 12:00 —</small></h1>
+  <div id="clip"><canvas id="cv" width="300" height="600"></canvas><div id="banner"></div><div id="ov"></div></div>
+  <div id="bar"><button class="stampbtn g" id="bP">PAUZĂ</button><button class="stampbtn g" id="bM">SUNET: DA</button><button class="stampbtn" id="bR">DE LA CAPĂT</button></div>
+ </main>
+ <aside id="right">
+  <div class="slip"><h3>Dosare închise</h3><div class="big" id="sc">0</div><div class="sub">Record (doar în memorie): <span id="hi">0</span></div></div>
+  <div class="slip"><h3>Nivel de birocrație</h3><div class="big" id="lv">1</div><div class="sub">Rânduri ștampilate: <span id="ln">0</span></div></div>
+  <div class="slip"><h3>Următoarea prostie</h3><canvas id="nx" width="96" height="200"></canvas></div>
+  <div class="slip"><h3>Se procesează</h3><div class="sub" id="cur">—</div></div>
+ </aside>
+</div>
+<div id="touch">
+ <button class="stampbtn" data-k="L">STÂNGA</button><button class="stampbtn" data-k="R">DREAPTA</button><button class="stampbtn" data-k="CW">ROTEȘTE</button><button class="stampbtn" data-k="D">JOS</button><button class="stampbtn" data-k="HD">LASĂ</button><button class="stampbtn g" data-k="HOLD">ARHIVĂ</button>
+</div>
+<script>
+(()=>{'use strict';
+/* ================= CONFIG ================= */
+const W=10,H=20,CS=30,DAS=150,ARR=40,LOCK=500,STEP=1000/60;
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const $=id=>document.getElementById(id);
+const cs=getComputedStyle(document.documentElement),C={};
+['manila','paper','ink','red','green','dark'].forEach(k=>C[k]=cs.getPropertyValue('--'+k).trim());
+const SHAPES={I:['....','XXXX','....','....'],O:['XX','XX'],T:['.X.','XXX','...'],S:['.XX','XX.','...'],Z:['XX.','.XX','...'],L:['..X','XXX','...'],J:['X..','XXX','...']};
+const NAMES={I:'Dosar cu șină',O:'Formular ștampilat',T:'Factură cu cafea',S:'Ștampilă',Z:'Capsator',L:'Ghiveci trist',J:'Xerox de xerox de xerox'};
+const ROT={};
+for(const t in SHAPES){let m=SHAPES[t].map(r=>[...r].map(c=>c=='X'?1:0)),a=[];
+ for(let k=0;k<4;k++){const n=m.length,l=[];m.forEach((r,y)=>r.forEach((v,x)=>v&&l.push([x,y])));a.push(l);
+  m=m.map((_,y)=>m.map((_,x)=>m[n-1-x][y]));}
+ ROT[t]=a;}
+/* SRS kicks, [dx,dy] with y up (inverted when applied). keys "from to" */
+const KJ={'01':[0,0,-1,0,-1,1,0,-2,-1,-2],'10':[0,0,1,0,1,-1,0,2,1,2],'12':[0,0,1,0,1,-1,0,2,1,2],'21':[0,0,-1,0,-1,1,0,-2,-1,-2],
+'23':[0,0,1,0,1,1,0,-2,1,-2],'32':[0,0,-1,0,-1,-1,0,2,-1,2],'30':[0,0,-1,0,-1,-1,0,2,-1,2],'03':[0,0,1,0,1,1,0,-2,1,-2]};
+const KI={'01':[0,0,-2,0,1,0,-2,-1,1,2],'10':[0,0,2,0,-1,0,2,1,-1,-2],'12':[0,0,-1,0,2,0,-1,2,2,-1],'21':[0,0,1,0,-2,0,1,-2,-2,1],
+'23':[0,0,2,0,-1,0,2,1,-1,-2],'32':[0,0,-2,0,1,0,-2,-1,1,2],'30':[0,0,1,0,-2,0,1,-2,-2,1],'03':[0,0,-1,0,2,0,-1,2,2,-1]};
+const LINES={1:['Un rând. Impresionant. Pentru o zi de luni.','Aprobat. Provizoriu.','Ștampilat. Nu ne mai întrebați.'],
+2:['Două? Aveți relații?','Doi dosari într-o zi. Ne dați de gândit.'],
+3:['Trei linii. Se deschide anchetă.','Cineva a dat șpagă. Sau a făcut sport.'],
+4:['Ați făcut 4 linii? Suspect.','Patru! Vă chemăm la Corpul de Control.']};
+const IDLE=['Lipsește un timbru.','Reveniți mâine.','Dosarul dumneavoastră s-a pierdut. Din nou.','Actul e valabil doar cu copie la copie.','Nu e de competența mea.','Aveți ora? Nu, nu vă spun a mea.','Vă lipsește Anexa 3. Anexa 3 lipsește tuturor.','Așteptați. Nu aici. Dincolo.','Cafeaua e pentru funcționari. Dosarele beau singure.'];
+const REASONS=['Culoarea cernelii nu corespunde cernelii prescrise.','Lipsește ștampila de pe ștampilă.','Funcționarul responsabil e în concediu din 1998.','Ați depus actele în ordinea corectă. Inacceptabil.','Formularul 27-B nu există, dar lipsește.','Dosarul era la ghișeul 4. Ghișeul 4 e la ghișeul 2.','Semnătura e prea lizibilă.','Copia nu seamănă suficient cu originalul.','Ați zâmbit la ghișeu.','Taxa de timbru pentru timbru nu a fost achitată.','Stiva depășește norma de incendiu și norma de optimism.'];
+const EVENTS=[
+ {n:'Ștampila s-a pierdut: comenzi inversate 5 secunde.',f(){rev=5000;face('shocked',2500)}},
+ {n:'Pauză de masă: funcționarul mănâncă un mic. 3 secunde.',f(){freeze=3000;say('Mă întorc. Poate.',2800);face('smug',3000)}},
+ {n:'Control inopinat: au apărut dosare vechi de la subsol.',f(){audit()}}];
+/* ================= STATE ================= */
+let board,cur,hold,canHold,queue,bag,score,lines,level,hi=0,mode='start',held={L:0,R:0,D:0},hdir=0,das=0,arrAcc=0,
+ gAcc=0,lockT=0,lockMoves=0,lowY=0,rev=0,freeze=0,evT=0,nextEv=0,shake=0,squash=null,stamps=[],parts=[],clock=0,speakT,faceT;
+/* ================= AUDIO ================= */
+let AC=null,muted=false;
+function ac(){if(!AC)try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}if(AC&&AC.state=='suspended')AC.resume();return AC}
+function tone(f,d,type='sine',v=.25,f2,w=0){const a=ac();if(!a||muted)return;const t=a.currentTime+w,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02)}
+function noise(d,v=.2,fc=2000){const a=ac();if(!a||muted)return;const n=a.sampleRate*d|0,b=a.createBuffer(1,n,a.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(Math.random()*2-1)*(1-i/n);const s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=b;f.type='bandpass';f.frequency.value=fc;g.gain.value=v;s.connect(f);f.connect(g);g.connect(a.destination);s.start()}
+const SND={thunk(){tone(150,.12,'sine',.4,50)},stamp(){tone(150,.14,'sine',.5,45);noise(.09,.35,700);tone(80,.3,'square',.15,40)},rustle(){noise(.14,.18,5000)},tick(){tone(900,.03,'square',.04)},
+ sad(){[233,220,208].forEach((f,i)=>tone(f,.4,'sawtooth',.2,f*.97,i*.42));tone(196,1.1,'sawtooth',.22,150,1.3)}};
+/* ================= CLERK / UI ================= */
+function say(t,ms=2600){const b=$('bubble');b.textContent=t;b.classList.remove('hide');clearTimeout(speakT);speakT=setTimeout(()=>b.classList.add('hide'),ms)}
+function face(s,ms=1400){const c=$('clerk');c.dataset.s=s;c.classList.add('pop');setTimeout(()=>c.classList.remove('pop'),180);clearTimeout(faceT);faceT=setTimeout(()=>c.dataset.s='bored',ms)}
+const pick=a=>a[Math.random()*a.length|0];
+function hud(){$('sc').textContent=score;$('lv').textContent=level;$('ln').textContent=lines;$('hi').textContent=hi;$('cur').textContent=cur?NAMES[cur.t]:'—'}
+function banner(t){const b=$('banner');b.textContent=t;b.classList.remove('show');void b.offsetWidth;b.classList.add('show')}
+function overlay(html){const o=$('ov');o.innerHTML=html||'';o.classList.toggle('on',!!html)}
+/* ================= GAME LOGIC ================= */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+function take(){if(!bag.length)bag=shuffle([...'IOTSZLJ']);return bag.pop()}
+function reset(){board=Array.from({length:H},()=>Array(W).fill(0));bag=[];queue=[take(),take(),take()];hold=null;canHold=true;score=lines=0;level=1;
+ rev=freeze=0;shake=0;stamps=[];parts=[];squash=null;evT=0;nextEv=18000+Math.random()*12000;held={L:0,R:0,D:0};hdir=0;spawn(queue.shift());queue.push(take());hud()}
+function spawn(t){cur={t,r:0,x:t=='O'?4:3,y:t=='I'?-1:0};gAcc=lockT=lockMoves=0;lowY=cur.y;if(hit(cur.t,0,cur.x,cur.y))over();hud()}
+function hit(t,r,x,y){for(const[cx,cy]of ROT[t][r]){const X=x+cx,Y=y+cy;if(X<0||X>=W||Y>=H||(Y>=0&&board[Y][X]))return true}return false}
+const grounded=()=>hit(cur.t,cur.r,cur.x,cur.y+1);
+function touched(){if(grounded()){lockT=0;lockMoves++}}
+function move(dx){if(!hit(cur.t,cur.r,cur.x+dx,cur.y)){cur.x+=dx;touched();return true}return false}
+function rotate(d){if(cur.t=='O')return;const nr=(cur.r+d+4)%4,k=(cur.t=='I'?KI:KJ)[''+cur.r+nr];
+ for(let i=0;i<10;i+=2)if(!hit(cur.t,nr,cur.x+k[i],cur.y-k[i+1])){cur.x+=k[i];cur.y-=k[i+1];cur.r=nr;SND.tick();touched();return}}
+function stepDown(){if(hit(cur.t,cur.r,cur.x,cur.y+1))return false;cur.y++;if(cur.y>lowY){lowY=cur.y;lockMoves=0}return true}
+function ghostY(){let y=cur.y;while(!hit(cur.t,cur.r,cur.x,y+1))y++;return y}
+function hardDrop(){const g=ghostY();score+=(g-cur.y)*2;cur.y=g;lock()}
+function doHold(){if(!canHold)return;canHold=false;const t=cur.t;if(hold){spawn(hold)}else{spawn(queue.shift());queue.push(take())}hold=t;SND.rustle();say('Păstrăm pentru mâine. Ca tot restul.',2000)}
+function lock(){const set=new Set();let top=false;
+ for(const[cx,cy]of ROT[cur.t][cur.r]){const X=cur.x+cx,Y=cur.y+cy;if(Y<0){top=true;continue}board[Y][X]=cur.t;set.add(X+','+Y)}
+ squash={set,t:0};SND.thunk();shake=Math.max(shake,3);burst(cur.x*CS+CS*2,(cur.y+2)*CS,5,.6);
+ if(top){over();return}
+ const full=[];board.forEach((r,y)=>r.every(v=>v)&&full.push(y));
+ if(full.length){const n=full.length;
+  board=board.filter((_,y)=>!full.includes(y));while(board.length<H)board.unshift(Array(W).fill(0));
+  score+=[0,100,300,500,800][n]*level;lines+=n;level=1+(lines/10|0);
+  const cy=(full.reduce((a,b)=>a+b)/n+.5)*CS;stamps.push({y:cy,t:0,n});
+  shake=Math.max(shake,6+n*5);SND.stamp();SND.rustle();full.forEach(y=>burst(W*CS/2,(y+.5)*CS,14,1.4));
+  say(pick(LINES[n]),2800);face(n==4?'shocked':n==1?'smug':'shocked',1600);if(n==4)setTimeout(()=>face('smug',1400),1600);
+  hi=Math.max(hi,score)}
+ else if(Math.random()<.14){const hgt=board.findIndex(r=>r.some(v=>v));say(hgt>=0&&hgt<6?'Stiva depășește norma de incendiu.':pick(IDLE));if(hgt>=0&&hgt<6)face('crying',1500)}
+ canHold=true;spawn(queue.shift());queue.push(take());hud()}
+function audit(){if(board[0].some(v=>v)){over();return}board.shift();const r=Array(W).fill('G'),h=Math.random()*W|0;r[h]=0;board.push(r);
+ if(hit(cur.t,cur.r,cur.x,cur.y)){cur.y--;if(hit(cur.t,cur.r,cur.x,cur.y)){over();return}}
+ say('Dosare vechi. Din 1974. Țineți-le.',3000);face('smug',2500);shake=Math.max(shake,8);SND.thunk()}
+function over(){mode='over';hi=Math.max(hi,score);hud();SND.sad();face('crying',99999);say('Dosarul dumneavoastră s-a pierdut. Din nou.',5000);
+ const rs=shuffle([...REASONS]).slice(0,3).map(r=>'<li>'+r+'</li>').join('');
+ overlay(`<div class="card"><h2>CERERE RESPINSĂ</h2><div>Stimate Cetățean,<br>Cererea Dvs. nr. ${1000+score%9000}/${new Date().getFullYear()} a fost <b>RESPINSĂ</b> din următoarele motive:<ol>${rs}</ol>Ați închis <b>${score}</b> dosare (${lines} rânduri). Puteți depune contestație, la ghișeul care nu există.<div style="text-align:right;margin:8px 0;color:#1e3a5f">p.p. Dl. Gheorghiță</div><button class="stampbtn" id="again">DEPUNEȚI DIN NOU</button></div></div>`);
+ $('again').onclick=start}
+function start(){ac();reset();mode='play';overlay();face('bored');say('Ghișeul este deschis. Deocamdată.')}
+function togglePause(){if(mode=='play'){mode='pause';overlay('<div class="card"><h2>PAUZĂ DE MASĂ</h2>Funcționarul nu e la birou.<br><br><button class="stampbtn g" id="res">REIA</button></div>');$('res').onclick=togglePause}else if(mode=='pause'){mode='play';overlay()}}
+/* ================= PARTICLES ================= */
+function burst(x,y,n,p){if(RM)n=Math.ceil(n/4);for(let i=0;i<n;i++)parts.push({x,y,vx:(Math.random()-.5)*7*p,vy:-Math.random()*6*p-1,a:Math.random()*6,va:(Math.random()-.5)*.5,w:4+Math.random()*7,h:3+Math.random()*5,l:1,c:pick([C.paper,C.paper,C.manila,C.red])})}
+/* ================= UPDATE ================= */
+function update(dt){
+ if(mode!='play')return;clock+=dt;
+ if(squash){squash.t+=dt;if(squash.t>240)squash=null}
+ if(freeze>0){freeze-=dt;return}
+ if(rev>0)rev=Math.max(0,rev-dt);
+ evT+=dt;if(evT>nextEv){evT=0;nextEv=20000+Math.random()*15000;const e=pick(EVENTS);banner(e.n);e.f()}
+ if(mode!='play')return;
+ /* DAS / ARR */
+ if(hdir){das+=dt;if(das>=DAS){arrAcc+=dt;const d=rev>0?-hdir:hdir;while(arrAcc>=ARR){arrAcc-=ARR;move(d)}}}
+ /* gravity */
+ const g=Math.max(1000*Math.pow(.8-(level-1)*.007,level-1),16),iv=held.D?Math.max(g/20,STEP*.8):g;
+ if(!grounded()){gAcc+=dt;while(gAcc>=iv){gAcc-=iv;if(!stepDown())break;if(held.D)score++}if(grounded())gAcc=0}
+ else{lockT+=dt;if(lockT>=LOCK||lockMoves>15){lock();return}}
+ hud()}
+function fx(dt){stamps.forEach(s=>s.t+=dt);stamps=stamps.filter(s=>s.t<900);
+ parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.28;p.vx*=.985;p.a+=p.va;p.l-=dt/900});parts=parts.filter(p=>p.l>0);
+ shake*=.88;if(shake<.2)shake=0}
+/* ================= INPUT ================= */
+function press(a){ac();if(mode=='start'||mode=='over'){if(a=='HD'||a=='ENTER')start();return}if(mode!='play')return;
+ if(a=='L'||a=='R'){held[a]=1;hdir=a=='L'?-1:1;das=arrAcc=0;move((rev>0?-1:1)*hdir)}
+ else if(a=='D')held.D=1;else if(a=='CW')rotate(1);else if(a=='CCW')rotate(-1);else if(a=='HD')hardDrop();else if(a=='HOLD')doHold()}
+function release(a){if(a=='L'||a=='R'){held[a]=0;if(hdir==(a=='L'?-1:1)){hdir=held.L?-1:held.R?1:0;das=arrAcc=0}}else if(a=='D')held.D=0}
+const KM={ArrowLeft:'L',a:'L',A:'L',ArrowRight:'R',d:'R',D:'R',ArrowDown:'D',s:'D',S:'D',ArrowUp:'CW',w:'CW',W:'CW',x:'CW',X:'CW',z:'CCW',Z:'CCW',' ':'HD',c:'HOLD',C:'HOLD',Shift:'HOLD',Enter:'ENTER'};
+addEventListener('keydown',e=>{if(e.key=='p'||e.key=='P'||e.key=='Escape'){togglePause();return}
+ if(e.key=='r'||e.key=='R'){start();return}const a=KM[e.key];if(a){e.preventDefault();if(!e.repeat)press(a)}});
+addEventListener('keyup',e=>{const a=KM[e.key];if(a)release(a)});
+document.querySelectorAll('#touch button').forEach(b=>{const k=b.dataset.k;b.addEventListener('pointerdown',e=>{e.preventDefault();press(k)});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>release(k)))});
+/* swipe + tap on the board */
+{const cv=$('cv');let sx,sy,st,moved,id=null;
+ cv.addEventListener('pointerdown',e=>{if(mode!='play')return;id=e.pointerId;cv.setPointerCapture(id);sx=e.clientX;sy=e.clientY;st=performance.now();moved=0});
+ cv.addEventListener('pointermove',e=>{if(e.pointerId!=id)return;const cp=cv.clientWidth/W;let dx=e.clientX-sx;
+  while(Math.abs(dx)>=cp){const d=Math.sign(dx);move((rev>0?-1:1)*d);sx+=d*cp;dx=e.clientX-sx;moved=1}});
+ cv.addEventListener('pointerup',e=>{if(e.pointerId!=id)return;id=null;const dy=e.clientY-sy,dx=e.clientX-sx,cp=cv.clientWidth/W;
+  if(!moved&&Math.hypot(dx,dy)<12)press('CW');else if(dy>cp*2.5&&dy>Math.abs(dx)*1.5)press('HD')})}
+$('bP').onclick=()=>{if(mode=='play'||mode=='pause')togglePause()};
+$('bR').onclick=start;
+$('bM').onclick=()=>{muted=!muted;$('bM').textContent='SUNET: '+(muted?'NU':'DA')};
+/* ================= RENDER ================= */
+const cv=$('cv'),g=cv.getContext('2d');
+function rnd(x,y,n,t){const v=Math.sin((x*12.9898+y*78.233+n*37.719+t.charCodeAt(0))*43758.5453);return v-Math.floor(v)-.5}
+function cell(g,x,y,s,t,a){
+ const j=n=>rnd(x/s,y/s,n,t);
+ g.save();g.globalAlpha=a==null?1:a;g.translate(x+s/2,y+s/2);g.rotate(j(1)*.06);g.translate(-s/2,-s/2);
+ g.fillStyle={I:C.manila,O:C.paper,T:C.paper,S:C.green,Z:C.ink,L:C.manila,J:C.paper,G:C.manila}[t];g.fillRect(1,1,s-2,s-2);
+ const k=s/30;g.lineWidth=1.6;g.lineJoin='round';g.strokeStyle=C.dark;
+ g.beginPath();g.moveTo(1+j(2)*2,1+j(3)*2);g.lineTo(s-1+j(4)*2,1+j(5)*2);g.lineTo(s-1+j(6)*2,s-1+j(7)*2);g.lineTo(1+j(8)*2,s-1+j(9)*2);g.closePath();g.stroke();
+ g.lineWidth=1.3;
+ if(t=='I'){g.fillStyle='rgba(43,37,32,.22)';g.fillRect(3*k,1,12*k,5*k);g.strokeStyle='rgba(43,37,32,.4)';g.beginPath();g.moveTo(5*k,14*k);g.lineTo(24*k,14*k);g.moveTo(5*k,20*k);g.lineTo(20*k,20*k);g.stroke()}
+ else if(t=='O'){g.strokeStyle=C.red;g.lineWidth=2.2;g.beginPath();g.arc(15*k+j(10)*4,15*k+j(11)*4,8*k,0,6.28);g.stroke();g.strokeStyle='rgba(30,58,95,.5)';g.beginPath();g.arc(16*k+j(10)*4,16*k+j(11)*4,8*k,.5,5.5);g.stroke()}
+ else if(t=='T'){g.strokeStyle='rgba(43,37,32,.5)';g.lineWidth=2.6;g.beginPath();g.arc(15*k+j(12)*6,15*k+j(13)*6,8*k,.6,5.3+j(14));g.stroke();g.strokeStyle='rgba(43,37,32,.25)';g.beginPath();g.moveTo(5*k,6*k);g.lineTo(18*k,6*k);g.stroke()}
+ else if(t=='S'){g.strokeStyle='rgba(242,236,218,.6)';g.beginPath();g.moveTo(5*k,7*k);g.lineTo(24*k,7*k);g.moveTo(5*k,23*k);g.lineTo(18*k,23*k);g.stroke();g.fillStyle='rgba(43,37,32,.3)';g.fillRect(11*k,11*k,8*k,8*k)}
+ else if(t=='Z'){g.strokeStyle='rgba(242,236,218,.75)';g.lineWidth=2.2;g.beginPath();g.moveTo(5*k,9*k);g.lineTo(5*k,19*k);g.moveTo(24*k,9*k);g.lineTo(24*k,19*k);g.stroke()}
+ else if(t=='L'){g.fillStyle=C.green;g.strokeStyle=C.dark;g.beginPath();g.ellipse(15*k+j(15)*3,13*k,5*k,9*k,.7+j(16),0,6.28);g.fill();g.stroke();g.beginPath();g.ellipse(9*k,19*k,4*k,7*k,-.8,0,6.28);g.fill();g.stroke()}
+ else if(t=='J'){g.fillStyle='rgba(43,37,32,.14)';g.fillRect(1,1,s-2,s-2);g.strokeStyle='rgba(43,37,32,.35)';g.beginPath();for(let i=0;i<3;i++){g.moveTo(5*k+i*2,8*k+i*6*k);g.lineTo(24*k+i*2,8*k+i*6*k)}g.stroke()}
+ else{g.fillStyle='rgba(43,37,32,.25)';g.fillRect(1,1,s-2,s-2);g.strokeStyle='rgba(43,37,32,.45)';g.beginPath();g.moveTo(4*k,10*k);g.lineTo(26*k,10*k);g.moveTo(4*k,20*k);g.lineTo(20*k,20*k);g.stroke()}
+ g.restore()}
+function mini(c,list,cs){const x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);
+ list.forEach((t,i)=>{if(!t)return;const cl=ROT[t][0],mx=Math.max(...cl.map(v=>v[0]))+1,my=Math.max(...cl.map(v=>v[1]))+1,ox=(c.width-mx*cs)/2,oy=i*(cs*3)+(cs*1.5-my*cs/2)+4;
+  cl.forEach(([cx,cy])=>cell(x,ox+cx*cs,oy+cy*cs,cs,t))})}
+function render(){
+ g.save();g.clearRect(0,0,300,600);
+ if(shake&&!RM)g.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
+ g.fillStyle=C.paper;g.fillRect(-10,-10,320,620);
+ g.strokeStyle='rgba(30,58,95,.14)';g.lineWidth=1;g.beginPath();
+ for(let y=1;y<H;y++){g.moveTo(0,y*CS+.5);g.lineTo(W*CS,y*CS+.5)}g.stroke();
+ g.strokeStyle='rgba(179,38,30,.35)';g.beginPath();g.moveTo(CS*.5,0);g.lineTo(CS*.5,600);g.stroke();
+ if(board){
+  const sq=squash?Math.sin(Math.PI*Math.min(squash.t/240,1)):0;
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const t=board[y][x];if(!t)continue;
+   if(squash&&squash.set.has(x+','+y)&&!RM){g.save();g.translate(x*CS+CS/2,(y+1)*CS);g.scale(1+.14*sq,1-.22*sq);g.translate(-CS/2,-CS);cell(g,0,0,CS,t);g.restore()}
+   else cell(g,x*CS,y*CS,CS,t)}
+  if(cur&&mode!='over'){const gy=ghostY();
+   if(gy!=cur.y)for(const[cx,cy]of ROT[cur.t][cur.r]){const X=(cur.x+cx)*CS,Y=(gy+cy)*CS;g.save();g.setLineDash([5,4]);g.strokeStyle='rgba(30,58,95,.7)';g.lineWidth=2;g.strokeRect(X+3,Y+3,CS-6,CS-6);g.restore()}
+   for(const[cx,cy]of ROT[cur.t][cur.r])if(cur.y+cy>=0)cell(g,(cur.x+cx)*CS,(cur.y+cy)*CS,CS,cur.t)}}
+ if(mode=='play'&&freeze>0){g.fillStyle='rgba(43,37,32,.45)';g.fillRect(0,0,300,600);g.fillStyle=C.paper;g.font='20px "Alfa Slab One",serif';g.textAlign='center';g.fillText('PAUZĂ DE MASĂ',150,300);g.font='15px "Special Elite",monospace';g.fillText((freeze/1000).toFixed(1)+'s',150,326)}
+ stamps.forEach(s=>{const p=Math.min(s.t/160,1),e=1-Math.pow(1-p,3),sc=1+(1-e)*(RM?0:1.8),al=s.t>600?1-(s.t-600)/300:1;
+  g.save();g.translate(150,s.y);g.rotate(RM?-.1:-.1+(1-e)*.3);g.scale(sc,sc);g.globalAlpha=al;g.textAlign='center';g.textBaseline='middle';
+  const fs=34+s.n*3;g.font=fs+'px "Alfa Slab One",serif';
+  g.fillStyle='rgba(30,58,95,.45)';g.fillText('APROBAT',5,4);
+  g.strokeStyle=C.red;g.lineWidth=4;g.strokeRect(-125,-fs*.8,250,fs*1.6);
+  g.fillStyle=C.red;g.fillText('APROBAT',0,0);g.restore()});
+ parts.forEach(p=>{g.save();g.globalAlpha=Math.max(p.l,0);g.translate(p.x,p.y);g.rotate(p.a);g.fillStyle=p.c;g.strokeStyle=C.dark;g.lineWidth=1;g.fillRect(-p.w/2,-p.h/2,p.w,p.h);g.strokeRect(-p.w/2,-p.h/2,p.w,p.h);g.restore()});
+ g.restore();
+ if(queue){mini($('nx'),queue,22);mini($('hold'),[hold],20)}}
+/* ================= MAIN LOOP ================= */
+let last=0,acc=0;
+function frame(ts){if(!last)last=ts;acc+=Math.min(ts-last,100);last=ts;
+ while(acc>=STEP){update(STEP);if(mode!='pause')fx(STEP);acc-=STEP}
+ render();requestAnimationFrame(frame)}
+/* ================= BOOT ================= */
+reset();mode='start';
+overlay(`<div class="card"><h2>ACT DOAR UN ACT</h2>Bun venit la ghișeul 4. Depuneți actele (cad singure). Completați rânduri întregi; fiecare rând primește ștampila <b style="color:#b3261e">APROBAT</b>.<ol><li>Săgeți / A D: mută. Sus / W / X: rotește (Z invers).</li><li>Jos / S: împinge. Spațiu: lasă jos.</li><li>C / Shift: arhivă. P: pauză. R: de la capăt.</li><li>Pe telefon: glisați, atingeți pentru rotire.</li></ol>Atenție: pot apărea evenimente administrative.<br><br><button class="stampbtn" id="go">DEPUNE CEREREA</button></div>`);
+$('go').onclick=start;
+setTimeout(()=>say('Reveniți mâine. Sau apăsați Enter.',4000),600);
+requestAnimationFrame(frame);
+})();
+</script></body></html>
